@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    {% for record_obj in record_list %}
+        <div class="panel panel-primary" style="margin: 10px 5px ">
+            <div class="panel-body">
+                <div style="margin: 3px 0">
+                    <div style="display: inline-block; color: #5bc0de"><i class="fa fa-user-o" aria-hidden="true"></i>{{ record_obj.consultant.nickname }}</div>
+                    <div style="display: inline-block"><i class="fa fa-clock-o" aria-hidden="true"></i>{{ record_obj.date }}</div>
+                </div>
+                {{ record_obj.note }}
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'layout.html' %}
+{% block css %}
+{% endblock %}
+
+{% block content %}
+    <div class="luffy-container">
+
+        {% if search_group_list %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-filter" aria-hidden="true"></i>&nbsp快速筛选
+                </div>
+                <div class="panel-body">
+                    <div class="search-group">
+                        {% for row in search_group_list %}
+                            <div class="row">
+                                {% for object in row %}
+                                    {{ object|safe }}
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if search_list %}
+                <div style="margin: 5px 0;float: right ">
+                    <form method="GET" class="form-inline">
+                        <div class="form-group">
+                            <input type="text" name="q" class="form-control" value="{{ search_value }}" placeholder="关键字搜索">
+                            <button class="btn btn-primary">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="parent">
+                {% if select_dict %}
+                    <div class="checked-all" style="float: left; margin: 5px 10px 5px 0">
+                        <label for="1" style="float: left; margin: 5px 10px 5px 0">全选</label>
+                        <input type="checkbox" id="1" class="btn btn-danger" style="display:none" >
+                    </div>
+                    <div style="float: left; margin: 5px 10px 5px 0">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <select class="form-control" name="select">
+                                    <option value="">请选择操作</option>
+                                    {% for func_name,func_text in select_dict.items %}
+                                        <option value="{{ func_name }}">{{ func_text }}</option>
+                                    {% endfor %}
+                                </select>
+                                <input type="submit" class="btn btn-primary" value="提交">
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if add_btn %}
+                    <div style="margin: 5px 0;float: left">
+                        {{ add_btn|safe }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <table class="table table-bordered">
+                <thead>
+                <tr class="title">
+                    {% for key in header_list %}
+                        <th>{{ key }}</th>
+                    {% endfor %}
+                </tr>
+
+                </thead>
+                <tbody>
+                {% for row_object in body_list %}
+                    <tr class="text">
+                        {% for ele in row_object %}
+                            <td>{{ ele }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <nav >
+        <ul class="pagination">
+            {{ pager.page_html|safe }}
+        </ul>
+    </nav>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(function () {
+            $('.checked-all input:checkbox').change(function () {
+                $(this).parents('.parent').next().find('.text :checkbox').prop('checked',$(this).prop('checked'))
+            })
+        })
+
+    </script>
+{% endblock %}
